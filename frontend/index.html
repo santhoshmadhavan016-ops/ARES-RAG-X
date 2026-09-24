@@ -1,409 +1,871 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARES-RAG X | Enterprise AI Assistant</title>
 
-```
-<title>ARES-RAG X</title>
-
-<style>
-    * {
-        box-sizing: border-box;
-    }
-
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f4f6f8;
-        color: #1f2937;
-    }
-
-    .header {
-        background: #111827;
-        color: white;
-        padding: 22px 30px;
-    }
-
-    .header h1 {
-        margin: 0;
-        font-size: 28px;
-    }
-
-    .header p {
-        margin: 6px 0 0;
-        color: #cbd5e1;
-    }
-
-    .status {
-        margin-top: 12px;
-        display: inline-block;
-        padding: 6px 12px;
-        border-radius: 20px;
-        background: #166534;
-        color: white;
-        font-size: 13px;
-    }
-
-    .container {
-        max-width: 900px;
-        margin: 35px auto;
-        padding: 0 20px;
-    }
-
-    .card {
-        background: white;
-        border-radius: 14px;
-        padding: 25px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        margin-bottom: 20px;
-    }
-
-    .card h2 {
-        margin-top: 0;
-    }
-
-    .examples {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 12px;
-        margin-bottom: 20px;
-    }
-
-    .example {
-        border: 1px solid #d1d5db;
-        border-radius: 10px;
-        padding: 14px;
-        cursor: pointer;
-        background: #f9fafb;
-        transition: 0.2s;
-    }
-
-    .example:hover {
-        background: #eef2ff;
-        border-color: #6366f1;
-    }
-
-    textarea {
-        width: 100%;
-        min-height: 120px;
-        resize: vertical;
-        border: 1px solid #d1d5db;
-        border-radius: 10px;
-        padding: 15px;
-        font-size: 16px;
-        outline: none;
-    }
-
-    textarea:focus {
-        border-color: #6366f1;
-    }
-
-    .buttons {
-        display: flex;
-        gap: 12px;
-        margin-top: 15px;
-    }
-
-    button {
-        border: none;
-        border-radius: 9px;
-        padding: 12px 22px;
-        font-size: 15px;
-        cursor: pointer;
-    }
-
-    .ask-btn {
-        background: #4f46e5;
-        color: white;
-        flex: 1;
-    }
-
-    .ask-btn:hover {
-        background: #4338ca;
-    }
-
-    .stop-btn {
-        background: #dc2626;
-        color: white;
-        flex: 1;
-        display: none;
-    }
-
-    .stop-btn:hover {
-        background: #b91c1c;
-    }
-
-    .new-btn {
-        background: #e5e7eb;
-        color: #111827;
-    }
-
-    .new-btn:hover {
-        background: #d1d5db;
-    }
-
-    button:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
-
-    .loading {
-        display: none;
-        text-align: center;
-        padding: 20px;
-        color: #4f46e5;
-        font-weight: bold;
-    }
-
-    .answer-box {
-        display: none;
-    }
-
-    .question-title {
-        font-weight: bold;
-        margin-bottom: 8px;
-    }
-
-    .question-display {
-        background: #f3f4f6;
-        padding: 12px;
-        border-radius: 8px;
-        margin-bottom: 18px;
-    }
-
-    .answer {
-        background: #eef2ff;
-        border-left: 4px solid #4f46e5;
-        padding: 18px;
-        border-radius: 8px;
-        white-space: pre-wrap;
-        line-height: 1.6;
-    }
-
-    .error {
-        display: none;
-        background: #fee2e2;
-        color: #991b1b;
-        padding: 15px;
-        border-radius: 8px;
-        margin-top: 15px;
-    }
-
-    .cancelled {
-        display: none;
-        background: #fff7ed;
-        color: #9a3412;
-        padding: 15px;
-        border-radius: 8px;
-        margin-top: 15px;
-    }
-
-    .footer {
-        text-align: center;
-        color: #6b7280;
-        padding: 20px;
-        font-size: 13px;
-    }
-
-    @media (max-width: 600px) {
-        .buttons {
-            flex-direction: column;
+    <style>
+        * {
+            box-sizing: border-box;
         }
-    }
-</style>
-```
 
+        :root {
+            --bg: #080b12;
+            --sidebar: #0d111a;
+            --panel: #111722;
+            --panel-light: #171e2b;
+            --border: #252e3d;
+            --text: #f3f4f6;
+            --muted: #8b96a8;
+            --primary: #6366f1;
+            --primary-hover: #7c7ff5;
+            --green: #22c55e;
+            --red: #ef4444;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            font-family: Inter, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* =========================
+           MAIN LAYOUT
+        ========================= */
+
+        .app {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            width: 285px;
+            background: var(--sidebar);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 16px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 4px 8px 24px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.25);
+        }
+
+        .brand-text h1 {
+            margin: 0;
+            font-size: 17px;
+            letter-spacing: 0.3px;
+        }
+
+        .brand-text span {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .new-chat {
+            width: 100%;
+            border: 1px solid var(--border);
+            background: #151b27;
+            color: white;
+            padding: 13px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            text-align: left;
+            transition: 0.2s;
+        }
+
+        .new-chat:hover {
+            background: #1c2432;
+            border-color: #3a465b;
+        }
+
+        .sidebar-title {
+            color: #667085;
+            text-transform: uppercase;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin: 28px 8px 12px;
+        }
+
+        .example {
+            width: 100%;
+            border: 1px solid transparent;
+            background: transparent;
+            color: #c5ccd8;
+            padding: 11px 10px;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 13px;
+            line-height: 1.4;
+            margin-bottom: 5px;
+            transition: 0.2s;
+        }
+
+        .example:hover {
+            background: #171e2b;
+            border-color: var(--border);
+            color: white;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            border-top: 1px solid var(--border);
+            padding-top: 16px;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: #aab3c2;
+            font-size: 12px;
+            padding: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.7);
+        }
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .topbar {
+            height: 70px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            background: rgba(8, 11, 18, 0.92);
+        }
+
+        .topbar-title {
+            font-size: 14px;
+            color: #c7ced9;
+        }
+
+        .topbar-title strong {
+            color: white;
+        }
+
+        .online {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 11px;
+            border: 1px solid #1d4930;
+            background: #0d1c13;
+            color: #86efac;
+            border-radius: 20px;
+            font-size: 11px;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 45px 25px 30px;
+        }
+
+        .chat-container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        /* =========================
+           WELCOME
+        ========================= */
+
+        .welcome {
+            text-align: center;
+            margin: 45px 0 35px;
+        }
+
+        .welcome-icon {
+            width: 65px;
+            height: 65px;
+            margin: 0 auto 20px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+            font-weight: bold;
+            box-shadow: 0 15px 45px rgba(99, 102, 241, 0.22);
+        }
+
+        .welcome h2 {
+            font-size: 29px;
+            margin: 0 0 10px;
+        }
+
+        .welcome p {
+            color: var(--muted);
+            margin: 0;
+            font-size: 14px;
+        }
+
+        /* =========================
+           SUGGESTIONS
+        ========================= */
+
+        .suggestions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .suggestion {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            color: #cbd2de;
+            transition: 0.2s;
+            font-size: 13px;
+            line-height: 1.45;
+        }
+
+        .suggestion:hover {
+            border-color: #4f46e5;
+            background: #151b29;
+            transform: translateY(-1px);
+        }
+
+        .suggestion-label {
+            color: #818cf8;
+            font-size: 10px;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 0.8px;
+            margin-bottom: 7px;
+        }
+
+        /* =========================
+           ANSWER
+        ========================= */
+
+        .answer-card {
+            display: none;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .answer-header {
+            padding: 15px 18px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .answer-label {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .ai-icon {
+            width: 27px;
+            height: 27px;
+            border-radius: 8px;
+            background: #312e81;
+            color: #c7d2fe;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .answer-body {
+            padding: 20px;
+        }
+
+        .question-display {
+            color: #7f8a9d;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .answer {
+            color: #e5e7eb;
+            line-height: 1.75;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+
+        /* =========================
+           INPUT
+        ========================= */
+
+        .input-area {
+            position: sticky;
+            bottom: 0;
+            max-width: 900px;
+            margin: auto;
+            width: 100%;
+            background: linear-gradient(
+                transparent,
+                var(--bg) 25%
+            );
+            padding: 25px 0 5px;
+        }
+
+        .input-box {
+            background: var(--panel);
+            border: 1px solid #30394a;
+            border-radius: 15px;
+            padding: 12px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
+            transition: 0.2s;
+        }
+
+        .input-box:focus-within {
+            border-color: #4f46e5;
+            box-shadow: 0 15px 50px rgba(79, 70, 229, 0.12);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 65px;
+            max-height: 180px;
+            resize: vertical;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 5px 6px;
+        }
+
+        textarea::placeholder {
+            color: #657084;
+        }
+
+        .input-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 8px;
+        }
+
+        .hint {
+            color: #667085;
+            font-size: 10px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        .clear-btn,
+        .stop-btn,
+        .ask-btn {
+            border: none;
+            border-radius: 9px;
+            padding: 9px 15px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+
+        .clear-btn {
+            background: #252c39;
+            color: #c5ccd8;
+        }
+
+        .clear-btn:hover {
+            background: #303949;
+            color: white;
+        }
+
+        .ask-btn {
+            background: #4f46e5;
+            color: white;
+            font-weight: bold;
+        }
+
+        .ask-btn:hover {
+            background: #6366f1;
+        }
+
+        .stop-btn {
+            display: none;
+            background: #7f1d1d;
+            color: #fecaca;
+        }
+
+        .stop-btn:hover {
+            background: #991b1b;
+        }
+
+        button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        /* =========================
+           LOADING
+        ========================= */
+
+        .loading {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 4px;
+            color: #818cf8;
+            font-size: 12px;
+        }
+
+        .loader {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #30364a;
+            border-top-color: #818cf8;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* =========================
+           MESSAGES
+        ========================= */
+
+        .error,
+        .cancelled {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 14px;
+            border-radius: 9px;
+            font-size: 12px;
+        }
+
+        .error {
+            background: #2a1215;
+            border: 1px solid #5b2026;
+            color: #fca5a5;
+        }
+
+        .cancelled {
+            background: #241b0e;
+            border: 1px solid #5a421c;
+            color: #fdba74;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+            text-align: center;
+            color: #4f596a;
+            font-size: 10px;
+            padding: 12px;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 800px) {
+            .sidebar {
+                display: none;
+            }
+
+            .topbar {
+                padding: 0 15px;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+
+            .welcome {
+                margin: 30px 0 25px;
+            }
+
+            .welcome h2 {
+                font-size: 23px;
+            }
+
+            .suggestions {
+                grid-template-columns: 1fr;
+            }
+
+            .hint {
+                display: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-```
-<div class="header">
+<div class="app">
 
-    <h1>ARES-RAG X</h1>
+    <!-- ================= SIDEBAR ================= -->
 
-    <p>
-        Enterprise RAG + SQL Hybrid AI Assistant
-    </p>
+    <aside class="sidebar">
 
-    <div class="status">
-        ● API Online
-    </div>
+        <div class="brand">
+            <div class="brand-icon">A</div>
 
-</div>
+            <div class="brand-text">
+                <h1>ARES-RAG X</h1>
+                <span>Enterprise AI Assistant</span>
+            </div>
+        </div>
 
+        <button class="new-chat" onclick="newQuestion()">
+            ＋ &nbsp; New Conversation
+        </button>
 
-<div class="container">
+        <div class="sidebar-title">
+            Suggested Questions
+        </div>
 
-    <div class="card">
+        <button class="example"
+                onclick="useExample('How many employees are there?')">
+            👥 How many employees are there?
+        </button>
 
-        <h2>Ask ARES-RAG X</h2>
+        <button class="example"
+                onclick="useExample('What is the annual leave policy?')">
+            📄 What is the annual leave policy?
+        </button>
 
-        <p>
-            Ask a question about company data or company policies.
-        </p>
+        <button class="example"
+                onclick="useExample('What is the sick leave policy?')">
+            🏥 What is the sick leave policy?
+        </button>
 
+        <button class="example"
+                onclick="useExample('How many employees are there and what is the annual leave policy?')">
+            🔗 Employee count + leave policy
+        </button>
 
-        <!-- Example Questions -->
+        <div class="sidebar-bottom">
 
-        <div class="examples">
-
-            <div class="example"
-                 onclick="useExample('How many employees are there?')">
-                How many employees are there?
+            <div class="system-status">
+                <span class="status-dot"></span>
+                API Connected
             </div>
 
-            <div class="example"
-                 onclick="useExample('What is the annual leave policy?')">
-                What is the annual leave policy?
-            </div>
-
-            <div class="example"
-                 onclick="useExample('What is the sick leave policy?')">
-                What is the sick leave policy?
-            </div>
-
-            <div class="example"
-                 onclick="useExample('How many employees are there and what is the annual leave policy?')">
-                Employee count + annual leave policy
+            <div class="system-status">
+                <span>⚡</span>
+                RAG + SQL Hybrid Engine
             </div>
 
         </div>
 
-
-        <!-- Question Input -->
-
-        <textarea
-            id="question"
-            placeholder="Type your question here..."
-        ></textarea>
+    </aside>
 
 
-        <!-- Buttons -->
+    <!-- ================= MAIN ================= -->
 
-        <div class="buttons">
+    <main class="main">
 
-            <button
-                class="ask-btn"
-                id="askButton"
-                onclick="askQuestion()">
-                Ask Question
-            </button>
+        <header class="topbar">
 
-            <button
-                class="stop-btn"
-                id="stopButton"
-                onclick="stopProcessing()">
-                Stop Processing
-            </button>
+            <div class="topbar-title">
+                <strong>ARES-RAG X</strong>
+                &nbsp; / &nbsp;
+                AI Knowledge Assistant
+            </div>
 
-            <button
-                class="new-btn"
-                onclick="newQuestion()">
-                + New Question
-            </button>
+            <div class="online">
+                <span class="status-dot"></span>
+                System Online
+            </div>
 
-        </div>
+        </header>
 
 
-        <!-- Loading -->
+        <section class="content">
 
-        <div
-            class="loading"
-            id="loading">
+            <div class="chat-container">
 
-            Processing your question...
+                <!-- WELCOME -->
 
-        </div>
+                <div class="welcome">
 
+                    <div class="welcome-icon">
+                        A
+                    </div>
 
-        <!-- Error -->
+                    <h2>How can I help you?</h2>
 
-        <div
-            class="error"
-            id="error">
-        </div>
+                    <p>
+                        Ask questions about company documents, policies,
+                        employees and structured business data.
+                    </p>
 
-
-        <!-- Cancelled -->
-
-        <div
-            class="cancelled"
-            id="cancelled">
-
-            Processing stopped. You can choose an example question above or enter a new question.
-
-        </div>
-
-    </div>
+                </div>
 
 
-    <!-- Answer -->
+                <!-- SUGGESTIONS -->
 
-    <div
-        class="card answer-box"
-        id="answerBox">
+                <div class="suggestions">
 
-        <h2>Answer</h2>
+                    <div class="suggestion"
+                         onclick="useExample('How many employees are there?')">
 
-        <div class="question-title">
-            Your Question
-        </div>
+                        <div class="suggestion-label">
+                            Database
+                        </div>
 
-        <div
-            class="question-display"
-            id="questionDisplay">
-        </div>
+                        How many employees are there?
 
-        <div
-            class="answer"
-            id="answer">
-        </div>
-
-        <div class="buttons">
-
-            <button
-                class="new-btn"
-                onclick="newQuestion()">
-                + Ask Next Question
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
+                    </div>
 
 
-<div class="footer">
+                    <div class="suggestion"
+                         onclick="useExample('What is the annual leave policy?')">
 
-    ARES-RAG X • Enterprise RAG + SQL Hybrid AI System
+                        <div class="suggestion-label">
+                            Documents
+                        </div>
+
+                        What is the annual leave policy?
+
+                    </div>
+
+
+                    <div class="suggestion"
+                         onclick="useExample('What is the sick leave policy?')">
+
+                        <div class="suggestion-label">
+                            Documents
+                        </div>
+
+                        What is the sick leave policy?
+
+                    </div>
+
+
+                    <div class="suggestion"
+                         onclick="useExample('How many employees are there and what is the annual leave policy?')">
+
+                        <div class="suggestion-label">
+                            Hybrid
+                        </div>
+
+                        Employee count + annual leave policy
+
+                    </div>
+
+                </div>
+
+
+                <!-- ANSWER -->
+
+                <div class="answer-card" id="answerBox">
+
+                    <div class="answer-header">
+
+                        <div class="answer-label">
+
+                            <div class="ai-icon">
+                                AI
+                            </div>
+
+                            ARES-RAG X
+
+                        </div>
+
+                        <span style="color:#667085;font-size:10px;">
+                            Generated Response
+                        </span>
+
+                    </div>
+
+                    <div class="answer-body">
+
+                        <div class="question-display"
+                             id="questionDisplay">
+                        </div>
+
+                        <div class="answer"
+                             id="answer">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LOADING -->
+
+                <div class="loading" id="loading">
+
+                    <div class="loader"></div>
+
+                    <span>
+                        ARES-RAG is processing your question...
+                    </span>
+
+                </div>
+
+
+                <!-- ERROR -->
+
+                <div class="error" id="error"></div>
+
+
+                <!-- CANCELLED -->
+
+                <div class="cancelled" id="cancelled">
+
+                    Processing stopped.
+                    You can enter a new question or choose a suggested question.
+
+                </div>
+
+
+                <!-- INPUT -->
+
+                <div class="input-area">
+
+                    <div class="input-box">
+
+                        <textarea
+                            id="question"
+                            placeholder="Ask ARES-RAG X anything about your company data..."
+                        ></textarea>
+
+
+                        <div class="input-bottom">
+
+                            <div class="hint">
+                                Press Ctrl + Enter to send
+                            </div>
+
+
+                            <div class="actions">
+
+                                <button
+                                    class="clear-btn"
+                                    onclick="newQuestion()">
+
+                                    Clear
+
+                                </button>
+
+
+                                <button
+                                    class="stop-btn"
+                                    id="stopButton"
+                                    onclick="stopProcessing()">
+
+                                    Stop
+
+                                </button>
+
+
+                                <button
+                                    class="ask-btn"
+                                    id="askButton"
+                                    onclick="askQuestion()">
+
+                                    Send ↗
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="footer">
+                        ARES-RAG X • Enterprise RAG + SQL Hybrid AI System
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
 
 </div>
 
 
 <script>
 
-    // =====================================================
+    // ============================================
     // ARES-RAG X API
-    // =====================================================
+    // ============================================
 
     const API_URL = "http://127.0.0.1:8000/ask";
 
-
-    // Current request controller
     let controller = null;
 
 
-    // =====================================================
-    // USE EXAMPLE QUESTION
-    // =====================================================
+    // ============================================
+    // USE EXAMPLE
+    // ============================================
 
     function useExample(text) {
 
-        // Stop any previous processing
         if (controller) {
             controller.abort();
             controller = null;
@@ -421,47 +883,19 @@
         const cancelled =
             document.getElementById("cancelled");
 
-        const loading =
-            document.getElementById("loading");
-
-        const askButton =
-            document.getElementById("askButton");
-
-        const stopButton =
-            document.getElementById("stopButton");
-
-
-        // Put selected example into textbox
         question.value = text;
 
-
-        // Clear old answer/error
         answerBox.style.display = "none";
-
         errorBox.style.display = "none";
-
         cancelled.style.display = "none";
 
-        loading.style.display = "none";
-
-
-        // Reset buttons
-        askButton.disabled = false;
-
-        askButton.style.display = "block";
-
-        stopButton.style.display = "none";
-
-
-        // Focus textbox
         question.focus();
-
     }
 
 
-    // =====================================================
+    // ============================================
     // ASK QUESTION
-    // =====================================================
+    // ============================================
 
     async function askQuestion() {
 
@@ -496,16 +930,15 @@
             document.getElementById("answer");
 
 
-        // =================================================
-        // EMPTY QUESTION
-        // =================================================
+        // Empty question
 
         if (!question) {
 
             errorBox.textContent =
                 "Please enter a question.";
 
-            errorBox.style.display = "block";
+            errorBox.style.display =
+                "block";
 
             questionInput.focus();
 
@@ -513,27 +946,21 @@
         }
 
 
-        // Clear previous messages
+        // Reset messages
 
         errorBox.style.display = "none";
-
         cancelled.style.display = "none";
-
         answerBox.style.display = "none";
 
 
-        // =================================================
-        // CREATE REQUEST CONTROLLER
-        // =================================================
+        // Create controller
 
         controller = new AbortController();
 
 
-        // =================================================
-        // SHOW PROCESSING
-        // =================================================
+        // Show loading
 
-        loading.style.display = "block";
+        loading.style.display = "flex";
 
         askButton.style.display = "none";
 
@@ -541,10 +968,6 @@
 
 
         try {
-
-            // =================================================
-            // SEND QUESTION TO FASTAPI
-            // =================================================
 
             const response =
                 await fetch(API_URL, {
@@ -564,15 +987,9 @@
                 });
 
 
-            // Try to read JSON response
-
             const data =
                 await response.json();
 
-
-            // =================================================
-            // API ERROR
-            // =================================================
 
             if (!response.ok) {
 
@@ -584,20 +1001,17 @@
             }
 
 
-            // =================================================
-            // DISPLAY QUESTION
-            // =================================================
+            // Display question
 
             questionDisplay.textContent =
-                question;
+                "Question: " + question;
 
 
-            // =================================================
-            // DISPLAY ANSWER
-            // =================================================
+            // Display answer
 
             answer.textContent =
-                data.answer || "No answer returned.";
+                data.answer ||
+                "No answer returned.";
 
 
             answerBox.style.display =
@@ -607,35 +1021,21 @@
             // Scroll to answer
 
             answerBox.scrollIntoView({
-                behavior: "smooth"
+                behavior: "smooth",
+                block: "center"
             });
-
 
         }
 
+
         catch (error) {
 
-            // =================================================
-            // REQUEST WAS CANCELLED
-            // =================================================
-
             if (error.name === "AbortError") {
-
-                console.log(
-                    "Question processing was stopped."
-                );
 
                 cancelled.style.display =
                     "block";
 
-                // Clear the question after stopping
-                questionInput.value = "";
-
             }
-
-            // =================================================
-            // OTHER ERROR
-            // =================================================
 
             else {
 
@@ -644,27 +1044,19 @@
                     error
                 );
 
-
                 errorBox.textContent =
-                    "Error: " + error.message;
-
+                    "Unable to process the question: " +
+                    error.message;
 
                 errorBox.style.display =
                     "block";
-
-
-                // Clear wrong/failed question
-                questionInput.value = "";
 
             }
 
         }
 
-        finally {
 
-            // =================================================
-            // RESET UI
-            // =================================================
+        finally {
 
             loading.style.display =
                 "none";
@@ -675,9 +1067,6 @@
             stopButton.style.display =
                 "none";
 
-            askButton.disabled =
-                false;
-
             controller = null;
 
         }
@@ -685,9 +1074,9 @@
     }
 
 
-    // =====================================================
+    // ============================================
     // STOP PROCESSING
-    // =====================================================
+    // ============================================
 
     function stopProcessing() {
 
@@ -702,13 +1091,11 @@
     }
 
 
-    // =====================================================
-    // NEW QUESTION
-    // =====================================================
+    // ============================================
+    // NEW QUESTION / CLEAR
+    // ============================================
 
     function newQuestion() {
-
-        // Stop current processing
 
         if (controller) {
 
@@ -741,62 +1128,28 @@
             document.getElementById("stopButton");
 
 
-        // Clear question
-
         question.value = "";
 
+        answerBox.style.display = "none";
 
-        // Hide old answer
+        errorBox.style.display = "none";
 
-        answerBox.style.display =
-            "none";
+        cancelled.style.display = "none";
 
+        loading.style.display = "none";
 
-        // Hide messages
+        askButton.style.display = "block";
 
-        errorBox.style.display =
-            "none";
-
-        cancelled.style.display =
-            "none";
-
-
-        // Stop loading
-
-        loading.style.display =
-            "none";
-
-
-        // Reset buttons
-
-        askButton.style.display =
-            "block";
-
-        askButton.disabled =
-            false;
-
-        stopButton.style.display =
-            "none";
-
-
-        // Focus input
+        stopButton.style.display = "none";
 
         question.focus();
-
-
-        // Scroll to question
-
-        question.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
 
     }
 
 
-    // =====================================================
+    // ============================================
     // CTRL + ENTER
-    // =====================================================
+    // ============================================
 
     document
         .getElementById("question")
@@ -819,7 +1172,6 @@
         );
 
 </script>
-```
 
 </body>
 </html>

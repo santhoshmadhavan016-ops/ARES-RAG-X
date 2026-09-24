@@ -271,6 +271,20 @@ Instead of requiring users to manually search documents or write SQL queries, th
 * Improved groundedness and factual verification
 * Multi-database support
 
+## Screenshots
+
+### ARES-RAG Interface
+
+![ARES-RAG Interface](screenshots/frontend.png)
+
+### Database Query
+
+![Database Query](screenshots/database-query.png)
+
+### Document Query
+
+![Document Query](screenshots/document-query.png)
+
 ## 👨‍💻 Author
 
 **Santhosh Madhavan**

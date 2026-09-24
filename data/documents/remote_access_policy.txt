@@ -1,0 +1,25 @@
+NOVA CORP — REMOTE ACCESS POLICY
+
+Secure Connection
+
+Employees accessing company systems remotely must use approved secure connections.
+
+Authentication
+
+Employees must use required authentication controls when accessing company resources remotely.
+
+Public Networks
+
+Sensitive company operations should not be performed using unsecured public networks.
+
+Company Devices
+
+Employees should use approved company devices for remote access.
+
+Access Monitoring
+
+Remote access activity may be monitored for security purposes.
+
+Incident Reporting
+
+Unauthorized remote access or suspicious activity must be reported immediately.

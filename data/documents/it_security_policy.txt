@@ -1,0 +1,33 @@
+NOVA CORP — IT SECURITY POLICY
+
+Password Policy
+
+Employees must create strong passwords containing a combination of uppercase letters, lowercase letters, numbers, and special characters. Passwords must not be shared with other employees.
+
+Multi-Factor Authentication
+
+Multi-factor authentication must be enabled for all systems that support it. Employees must use the company's approved authentication methods when accessing corporate systems.
+
+Data Protection
+
+Confidential company information must only be stored on approved company systems. Employees must not copy confidential information to unauthorized personal devices or cloud storage services.
+
+Email Security
+
+Employees must be cautious when opening email attachments or clicking links from unknown senders. Suspicious emails should be reported to the IT security team.
+
+Device Security
+
+Company laptops and other devices must be protected using approved security software. Employees must lock their devices whenever they leave their workstation.
+
+Incident Reporting
+
+Security incidents, suspected data breaches, lost company devices, and unauthorized access attempts must be reported to the IT security team immediately.
+
+Remote Access
+
+Employees accessing company systems remotely must use the approved secure connection provided by Nova Corp. Public or unsecured networks should not be used for sensitive company operations.
+
+Software Installation
+
+Employees must not install unauthorized software on company devices. Software required for business purposes should be requested through the IT support process.

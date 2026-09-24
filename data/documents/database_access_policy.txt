@@ -1,0 +1,25 @@
+NOVA CORP — DATABASE ACCESS POLICY
+
+Access Control
+
+Database access must be granted only to employees who require it for their responsibilities.
+
+Authentication
+
+Employees must use approved authentication methods when accessing company databases.
+
+Sensitive Data
+
+Sensitive database information must be protected from unauthorized access.
+
+Access Reviews
+
+Database permissions should be reviewed periodically.
+
+Data Changes
+
+Important production data changes should be authorized and logged.
+
+Incident Reporting
+
+Unauthorized database access must be reported to the security team immediately.

@@ -1,0 +1,25 @@
+NOVA CORP — SOFTWARE DEVELOPMENT POLICY
+
+Code Review
+
+Software changes should be reviewed by another authorized developer before production deployment.
+
+Version Control
+
+Source code must be stored in approved version control systems.
+
+Testing
+
+Developers should perform appropriate testing before releasing software.
+
+Security
+
+Applications must follow approved secure development practices.
+
+Documentation
+
+Important software components should have appropriate technical documentation.
+
+Production Access
+
+Production systems should only be accessed by authorized employees.

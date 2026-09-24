@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>ARES-RAG X</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f6f8;
+        color: #1f2937;
+    }
+
+    .header {
+        background: #111827;
+        color: white;
+        padding: 22px 30px;
+    }
+
+    .header h1 {
+        margin: 0;
+        font-size: 28px;
+    }
+
+    .header p {
+        margin: 6px 0 0;
+        color: #cbd5e1;
+    }
+
+    .status {
+        margin-top: 12px;
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        background: #166534;
+        color: white;
+        font-size: 13px;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 35px auto;
+        padding: 0 20px;
+    }
+
+    .card {
+        background: white;
+        border-radius: 14px;
+        padding: 25px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 20px;
+    }
+
+    .card h2 {
+        margin-top: 0;
+    }
+
+    .examples {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .example {
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        padding: 14px;
+        cursor: pointer;
+        background: #f9fafb;
+        transition: 0.2s;
+    }
+
+    .example:hover {
+        background: #eef2ff;
+        border-color: #6366f1;
+    }
+
+    textarea {
+        width: 100%;
+        min-height: 120px;
+        resize: vertical;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        padding: 15px;
+        font-size: 16px;
+        outline: none;
+    }
+
+    textarea:focus {
+        border-color: #6366f1;
+    }
+
+    .buttons {
+        display: flex;
+        gap: 12px;
+        margin-top: 15px;
+    }
+
+    button {
+        border: none;
+        border-radius: 9px;
+        padding: 12px 22px;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+    .ask-btn {
+        background: #4f46e5;
+        color: white;
+        flex: 1;
+    }
+
+    .ask-btn:hover {
+        background: #4338ca;
+    }
+
+    .stop-btn {
+        background: #dc2626;
+        color: white;
+        flex: 1;
+        display: none;
+    }
+
+    .stop-btn:hover {
+        background: #b91c1c;
+    }
+
+    .new-btn {
+        background: #e5e7eb;
+        color: #111827;
+    }
+
+    .new-btn:hover {
+        background: #d1d5db;
+    }
+
+    button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .loading {
+        display: none;
+        text-align: center;
+        padding: 20px;
+        color: #4f46e5;
+        font-weight: bold;
+    }
+
+    .answer-box {
+        display: none;
+    }
+
+    .question-title {
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .question-display {
+        background: #f3f4f6;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 18px;
+    }
+
+    .answer {
+        background: #eef2ff;
+        border-left: 4px solid #4f46e5;
+        padding: 18px;
+        border-radius: 8px;
+        white-space: pre-wrap;
+        line-height: 1.6;
+    }
+
+    .error {
+        display: none;
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 15px;
+    }
+
+    .cancelled {
+        display: none;
+        background: #fff7ed;
+        color: #9a3412;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 15px;
+    }
+
+    .footer {
+        text-align: center;
+        color: #6b7280;
+        padding: 20px;
+        font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+        .buttons {
+            flex-direction: column;
+        }
+    }
+</style>
+```
+
+</head>
+
+<body>
+
+```
+<div class="header">
+
+    <h1>ARES-RAG X</h1>
+
+    <p>
+        Enterprise RAG + SQL Hybrid AI Assistant
+    </p>
+
+    <div class="status">
+        ● API Online
+    </div>
+
+</div>
+
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>Ask ARES-RAG X</h2>
+
+        <p>
+            Ask a question about company data or company policies.
+        </p>
+
+
+        <!-- Example Questions -->
+
+        <div class="examples">
+
+            <div class="example"
+                 onclick="useExample('How many employees are there?')">
+                How many employees are there?
+            </div>
+
+            <div class="example"
+                 onclick="useExample('What is the annual leave policy?')">
+                What is the annual leave policy?
+            </div>
+
+            <div class="example"
+                 onclick="useExample('What is the sick leave policy?')">
+                What is the sick leave policy?
+            </div>
+
+            <div class="example"
+                 onclick="useExample('How many employees are there and what is the annual leave policy?')">
+                Employee count + annual leave policy
+            </div>
+
+        </div>
+
+
+        <!-- Question Input -->
+
+        <textarea
+            id="question"
+            placeholder="Type your question here..."
+        ></textarea>
+
+
+        <!-- Buttons -->
+
+        <div class="buttons">
+
+            <button
+                class="ask-btn"
+                id="askButton"
+                onclick="askQuestion()">
+                Ask Question
+            </button>
+
+            <button
+                class="stop-btn"
+                id="stopButton"
+                onclick="stopProcessing()">
+                Stop Processing
+            </button>
+
+            <button
+                class="new-btn"
+                onclick="newQuestion()">
+                + New Question
+            </button>
+
+        </div>
+
+
+        <!-- Loading -->
+
+        <div
+            class="loading"
+            id="loading">
+
+            Processing your question...
+
+        </div>
+
+
+        <!-- Error -->
+
+        <div
+            class="error"
+            id="error">
+        </div>
+
+
+        <!-- Cancelled -->
+
+        <div
+            class="cancelled"
+            id="cancelled">
+
+            Processing stopped. You can choose an example question above or enter a new question.
+
+        </div>
+
+    </div>
+
+
+    <!-- Answer -->
+
+    <div
+        class="card answer-box"
+        id="answerBox">
+
+        <h2>Answer</h2>
+
+        <div class="question-title">
+            Your Question
+        </div>
+
+        <div
+            class="question-display"
+            id="questionDisplay">
+        </div>
+
+        <div
+            class="answer"
+            id="answer">
+        </div>
+
+        <div class="buttons">
+
+            <button
+                class="new-btn"
+                onclick="newQuestion()">
+                + Ask Next Question
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="footer">
+
+    ARES-RAG X • Enterprise RAG + SQL Hybrid AI System
+
+</div>
+
+
+<script>
+
+    // =====================================================
+    // ARES-RAG X API
+    // =====================================================
+
+    const API_URL = "http://127.0.0.1:8000/ask";
+
+
+    // Current request controller
+    let controller = null;
+
+
+    // =====================================================
+    // USE EXAMPLE QUESTION
+    // =====================================================
+
+    function useExample(text) {
+
+        // Stop any previous processing
+        if (controller) {
+            controller.abort();
+            controller = null;
+        }
+
+        const question =
+            document.getElementById("question");
+
+        const answerBox =
+            document.getElementById("answerBox");
+
+        const errorBox =
+            document.getElementById("error");
+
+        const cancelled =
+            document.getElementById("cancelled");
+
+        const loading =
+            document.getElementById("loading");
+
+        const askButton =
+            document.getElementById("askButton");
+
+        const stopButton =
+            document.getElementById("stopButton");
+
+
+        // Put selected example into textbox
+        question.value = text;
+
+
+        // Clear old answer/error
+        answerBox.style.display = "none";
+
+        errorBox.style.display = "none";
+
+        cancelled.style.display = "none";
+
+        loading.style.display = "none";
+
+
+        // Reset buttons
+        askButton.disabled = false;
+
+        askButton.style.display = "block";
+
+        stopButton.style.display = "none";
+
+
+        // Focus textbox
+        question.focus();
+
+    }
+
+
+    // =====================================================
+    // ASK QUESTION
+    // =====================================================
+
+    async function askQuestion() {
+
+        const questionInput =
+            document.getElementById("question");
+
+        const question =
+            questionInput.value.trim();
+
+        const askButton =
+            document.getElementById("askButton");
+
+        const stopButton =
+            document.getElementById("stopButton");
+
+        const loading =
+            document.getElementById("loading");
+
+        const errorBox =
+            document.getElementById("error");
+
+        const cancelled =
+            document.getElementById("cancelled");
+
+        const answerBox =
+            document.getElementById("answerBox");
+
+        const questionDisplay =
+            document.getElementById("questionDisplay");
+
+        const answer =
+            document.getElementById("answer");
+
+
+        // =================================================
+        // EMPTY QUESTION
+        // =================================================
+
+        if (!question) {
+
+            errorBox.textContent =
+                "Please enter a question.";
+
+            errorBox.style.display = "block";
+
+            questionInput.focus();
+
+            return;
+        }
+
+
+        // Clear previous messages
+
+        errorBox.style.display = "none";
+
+        cancelled.style.display = "none";
+
+        answerBox.style.display = "none";
+
+
+        // =================================================
+        // CREATE REQUEST CONTROLLER
+        // =================================================
+
+        controller = new AbortController();
+
+
+        // =================================================
+        // SHOW PROCESSING
+        // =================================================
+
+        loading.style.display = "block";
+
+        askButton.style.display = "none";
+
+        stopButton.style.display = "block";
+
+
+        try {
+
+            // =================================================
+            // SEND QUESTION TO FASTAPI
+            // =================================================
+
+            const response =
+                await fetch(API_URL, {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        question: question
+                    }),
+
+                    signal: controller.signal
+
+                });
+
+
+            // Try to read JSON response
+
+            const data =
+                await response.json();
+
+
+            // =================================================
+            // API ERROR
+            // =================================================
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.detail ||
+                    "The question could not be processed."
+                );
+
+            }
+
+
+            // =================================================
+            // DISPLAY QUESTION
+            // =================================================
+
+            questionDisplay.textContent =
+                question;
+
+
+            // =================================================
+            // DISPLAY ANSWER
+            // =================================================
+
+            answer.textContent =
+                data.answer || "No answer returned.";
+
+
+            answerBox.style.display =
+                "block";
+
+
+            // Scroll to answer
+
+            answerBox.scrollIntoView({
+                behavior: "smooth"
+            });
+
+
+        }
+
+        catch (error) {
+
+            // =================================================
+            // REQUEST WAS CANCELLED
+            // =================================================
+
+            if (error.name === "AbortError") {
+
+                console.log(
+                    "Question processing was stopped."
+                );
+
+                cancelled.style.display =
+                    "block";
+
+                // Clear the question after stopping
+                questionInput.value = "";
+
+            }
+
+            // =================================================
+            // OTHER ERROR
+            // =================================================
+
+            else {
+
+                console.error(
+                    "ARES-RAG API Error:",
+                    error
+                );
+
+
+                errorBox.textContent =
+                    "Error: " + error.message;
+
+
+                errorBox.style.display =
+                    "block";
+
+
+                // Clear wrong/failed question
+                questionInput.value = "";
+
+            }
+
+        }
+
+        finally {
+
+            // =================================================
+            // RESET UI
+            // =================================================
+
+            loading.style.display =
+                "none";
+
+            askButton.style.display =
+                "block";
+
+            stopButton.style.display =
+                "none";
+
+            askButton.disabled =
+                false;
+
+            controller = null;
+
+        }
+
+    }
+
+
+    // =====================================================
+    // STOP PROCESSING
+    // =====================================================
+
+    function stopProcessing() {
+
+        if (controller) {
+
+            controller.abort();
+
+            controller = null;
+
+        }
+
+    }
+
+
+    // =====================================================
+    // NEW QUESTION
+    // =====================================================
+
+    function newQuestion() {
+
+        // Stop current processing
+
+        if (controller) {
+
+            controller.abort();
+
+            controller = null;
+
+        }
+
+
+        const question =
+            document.getElementById("question");
+
+        const answerBox =
+            document.getElementById("answerBox");
+
+        const errorBox =
+            document.getElementById("error");
+
+        const cancelled =
+            document.getElementById("cancelled");
+
+        const loading =
+            document.getElementById("loading");
+
+        const askButton =
+            document.getElementById("askButton");
+
+        const stopButton =
+            document.getElementById("stopButton");
+
+
+        // Clear question
+
+        question.value = "";
+
+
+        // Hide old answer
+
+        answerBox.style.display =
+            "none";
+
+
+        // Hide messages
+
+        errorBox.style.display =
+            "none";
+
+        cancelled.style.display =
+            "none";
+
+
+        // Stop loading
+
+        loading.style.display =
+            "none";
+
+
+        // Reset buttons
+
+        askButton.style.display =
+            "block";
+
+        askButton.disabled =
+            false;
+
+        stopButton.style.display =
+            "none";
+
+
+        // Focus input
+
+        question.focus();
+
+
+        // Scroll to question
+
+        question.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+    }
+
+
+    // =====================================================
+    // CTRL + ENTER
+    // =====================================================
+
+    document
+        .getElementById("question")
+        .addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    event.ctrlKey &&
+                    event.key === "Enter"
+                ) {
+
+                    event.preventDefault();
+
+                    askQuestion();
+
+                }
+
+            }
+        );
+
+</script>
+```
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "question": "How many employees are there?",
+        "expected_route": "sql",
+        "expected_answer_contains": "100"
+    },
+    {
+        "id": 2,
+        "question": "What is the average salary?",
+        "expected_route": "sql",
+        "expected_answer_contains": "90202"
+    },
+    {
+        "id": 3,
+        "question": "What are the rules for remote access?",
+        "expected_route": "document",
+        "expected_answer_contains": "remote"
+    },
+    {
+        "id": 4,
+        "question": "What is the leave policy?",
+        "expected_route": "document",
+        "expected_answer_contains": "leave"
+    },
+    {
+        "id": 5,
+        "question": "How many employees are there and what are the company benefits?",
+        "expected_route": "hybrid",
+        "expected_answer_contains": "100"
+    }
+]

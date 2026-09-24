@@ -1,0 +1,25 @@
+NOVA CORP — INFORMATION CLASSIFICATION POLICY
+
+Public Information
+
+Information approved for public distribution may be shared externally.
+
+Internal Information
+
+Internal company information should only be shared with authorized employees.
+
+Confidential Information
+
+Confidential information must be protected from unauthorized access.
+
+Restricted Information
+
+Restricted information requires additional security controls and limited access.
+
+Data Handling
+
+Employees must store information using approved company systems.
+
+Incident Reporting
+
+Misclassified or accidentally exposed information must be reported to the appropriate security team.

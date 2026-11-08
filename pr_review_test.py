@@ -1,4 +1,4 @@
-
+# Testing GitHub webhook automation
 def calculate_average(total, count):
     result = total / count
     return result
